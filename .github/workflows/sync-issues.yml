@@ -1,0 +1,48 @@
+name: Sync Issues to data.json
+
+on:
+  issues:
+    types: [opened, edited, deleted, closed]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Extract issues
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open"
+            });
+
+            const data = { projects: [], blogs: [], papers: [] };
+
+            for (const issue of issues) {
+              if (issue.labels.some(l => l.name === "project")) {
+                data.projects.push({ title: issue.title, content: issue.body });
+              }
+              if (issue.labels.some(l => l.name === "blog")) {
+                data.blogs.push({ title: issue.title, content: issue.body });
+              }
+              if (issue.labels.some(l => l.name === "paper")) {
+                data.papers.push({ title: issue.title, content: issue.body });
+              }
+            }
+
+            fs.writeFileSync("data.json", JSON.stringify(data, null, 2));
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add data.json
+          git commit -m "Update data.json from issues" || echo "No changes"
+          git push
