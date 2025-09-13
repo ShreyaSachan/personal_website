@@ -2,7 +2,11 @@ name: Sync Issues to data.json
 
 on:
   issues:
-    types: [opened, edited, deleted, closed]
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
+
+permissions:
+  contents: write
+  issues: read
 
 jobs:
   build:
@@ -44,5 +48,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add data.json
-          git commit -m "Update data.json from issues" || echo "No changes"
+          git commit -m "Update data.json from issues" || echo "No changes to commit"
           git push
