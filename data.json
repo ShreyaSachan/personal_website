@@ -1,5 +1,10 @@
 {
-  "project": [],
-  "paper": [],
-  "blog": []
+  "projects": [],
+  "blogs": [
+    {
+      "title": "demo blog title1",
+      "content": "content xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+  ],
+  "papers": []
 }
