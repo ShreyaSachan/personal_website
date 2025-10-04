@@ -1,5 +1,10 @@
 {
-  "projects": [],
+  "projects": [
+    {
+      "title": "project demo1",
+      "content": "demoxxxxxxxxxxx"
+    }
+  ],
   "blogs": [
     {
       "title": "demo title",
